@@ -7,6 +7,9 @@ import secret
 ## Flask_MongoDB imports
 from mongo import mongo
 
+## Flask GoogleMaps
+from flask_googlemaps import GoogleMaps, Map
+
 ## Flask_REST API imports
 from flask_restful import Api
 from api.resources.data import Data
@@ -25,6 +28,9 @@ app.config.from_object('config')
 
 # Init the mongo flask instance
 mongo.init_app(app)
+
+# you can also pass the key here if you prefer
+GoogleMaps(app, key=secret.GOOGLEMAPS_KEY)
 
 
 '''
@@ -75,7 +81,33 @@ def logout():
 @app.route("/admin/dashboard", methods=['GET'])
 @login_required
 def dashboard():
-    return render_template("admin/dashboard.html")
+    dashboard_map = Map(
+        identifier="dashboard_map",
+        style=(
+            "height:100%;"
+            "width:100%;"
+            "top:0;"
+            "left:0;"
+            "min-height:500px;"
+        ),
+        lat=-31.9538,
+        lng=115.8532,
+        markers=[
+          {
+             'icon': 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+             'lat': -31.9538,
+             'lng': 115.8532,
+             'infobox': "<b>CORE Hub</b>"
+          },
+          {
+             'icon': 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+             'lat': -31.953494,
+             'lng': 115.8540433,
+             'infobox': "<b>SAP Perth</b>"
+          }
+        ]
+    )
+    return render_template("admin/dashboard.html", dashboard_map=dashboard_map)
 
 
 @app.route("/admin/databases", methods=['GET'])
