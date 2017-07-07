@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, session, url_for
 from functools import wraps
 from hashlib import sha256
 import json
+import requests.adapters
 import requests
 
 import secret
@@ -88,7 +89,13 @@ def dashboard():
 
     points = []
 
-    r = requests.get(request.url_root + 'api/v1/data')
+    s = requests.Session()
+    a = requests.adapters.HTTPAdapter(max_retries=3)
+    b = requests.adapters.HTTPAdapter(max_retries=3)
+    s.mount('http://', a)
+    s.mount('https://', b)
+    r = s.get(request.url_root + 'api/v1/data')
+
     for entry in r.json()['data']:
         item = {
             'icon': 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
