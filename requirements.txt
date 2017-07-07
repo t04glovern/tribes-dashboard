@@ -3,3 +3,4 @@ Flask-PyMongo==0.4.1
 Flask-RESTful==0.3.5
 Flask-GoogleMaps==0.2.4
 gunicorn==19.7.1
+requests==2.18.1
