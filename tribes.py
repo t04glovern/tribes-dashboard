@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, session, url_for
 from functools import wraps
 from hashlib import sha256
+import json
+import requests
 
 import secret
 
@@ -13,7 +15,6 @@ from flask_googlemaps import GoogleMaps, Map
 ## Flask_REST API imports
 from flask_restful import Api
 from api.resources.data import Data
-
 
 '''
 Init
@@ -32,10 +33,11 @@ mongo.init_app(app)
 # you can also pass the key here if you prefer
 GoogleMaps(app, key=secret.GOOGLEMAPS_KEY)
 
-
 '''
 Utilities
 '''
+
+
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -51,6 +53,8 @@ def login_required(f):
 '''
 Web Page Routes
 '''
+
+
 @app.route("/", methods=['GET'])
 def landing():
     return render_template("landing/index.html")
@@ -81,6 +85,19 @@ def logout():
 @app.route("/admin/dashboard", methods=['GET'])
 @login_required
 def dashboard():
+
+    points = []
+
+    r = requests.get(request.url_root + 'api/v1/data')
+    for entry in r.json()['data']:
+        item = {
+            'icon': 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+            'lat': entry['location_lat'],
+            'lng': entry['location_lon'],
+            'infobox': "<b>" + entry['sensor_id'] + "</b>"
+        }
+        points.append(item)
+
     dashboard_map = Map(
         identifier="dashboard_map",
         style=(
@@ -92,22 +109,30 @@ def dashboard():
         ),
         lat=-31.9538,
         lng=115.8532,
-        markers=[
-          {
-             'icon': 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
-             'lat': -31.9538,
-             'lng': 115.8532,
-             'infobox': "<b>CORE Hub</b>"
-          },
-          {
-             'icon': 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-             'lat': -31.953494,
-             'lng': 115.8540433,
-             'infobox': "<b>SAP Perth</b>"
-          }
-        ]
+        markers=points
     )
     return render_template("admin/dashboard.html", dashboard_map=dashboard_map)
+
+
+@app.route("/ajax/data_insert", methods=['POST'])
+def sensor_add():
+    data = json.loads(request.data)
+
+    sensor_id = data['sensor_id']
+    sensor_mac = data['sensor_mac']
+    location_lon = data['location_lon']
+    location_lat = data['location_lat']
+    timestamp = data['timestamp']
+
+    entry = {
+        'sensor_id': sensor_id,
+        'sensor_mac': sensor_mac,
+        'location_lon': location_lon,
+        'location_lat': location_lat,
+        'timestamp': timestamp
+    }
+
+    mongo.db['tribes-data'].insert_one(entry)
 
 
 @app.route("/admin/databases", methods=['GET'])

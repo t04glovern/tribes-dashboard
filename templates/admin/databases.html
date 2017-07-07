@@ -19,9 +19,10 @@
             "ajax": "/api/v1/data",
             "columns": [
                 { "data": "timestamp" },
-                { "data": "temperatureC" },
-                { "data": "humidity" },
-                { "data": "heatIndexC" }
+                { "data": "sensor_id" },
+                { "data": "sensor_mac" },
+                { "data": "location_lon" },
+                { "data": "location_lat" }
             ],
             dom: 'Bfrtip',
             "buttons": [
@@ -63,9 +64,10 @@
                         <thead>
                             <tr>
                                 <th>Timestamp</th>
-                                <th>Temperature (&#8451)</th>
-                                <th>Humidity (%)</th>
-                                <th>Heat Index (&#8451)</th>
+                                <th>Sensor ID</th>
+                                <th>Sensor MAC</th>
+                                <th>Longitude</th>
+                                <th>Latitude</th>
                             </tr>
                         </thead>
                     </table>
