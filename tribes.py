@@ -1,9 +1,8 @@
-from flask import Flask, render_template, request, redirect, session, url_for
+from flask import Flask, render_template, request, redirect, session, url_for, jsonify
 from functools import wraps
 from hashlib import sha256
 import json
 import requests
-import time
 
 import secret
 
@@ -86,13 +85,18 @@ def logout():
 @app.route("/admin/dashboard", methods=['GET'])
 @login_required
 def dashboard():
-
     points = []
 
-    r = requests.get(request.url_root + 'api/v1/data')
-    time.sleep(1)
+    data_pipeline = [
+        {"$sort": {
+            "_id": -1}},
+        {"$limit": 100},
+        {"$project": {
+            "_id": 0}}
+    ]
+    data_info = list(mongo.db['tribes-data'].aggregate(pipeline=data_pipeline))
 
-    for entry in r.json()['data']:
+    for entry in data_info:
         item = {
             'icon': 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
             'lat': entry['location_lat'],
