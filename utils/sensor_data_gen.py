@@ -48,7 +48,7 @@ for x in range(101, 110):
         'IMUerror': random.choice([True, False]),
         'rightdirection': random.choice([True, False]),
         'course': random.uniform(0, 5),
-        'nstats': random.uniform(0, 5),
+        'nsats': random.randint(0, 256),
         'snr1': random.randint(-80, 80),
         'snr2': random.randint(-80, 80),
         'snr3': random.randint(-80, 80),
