@@ -40,6 +40,18 @@ for x in range(101, 110):
         'sensor_id': "NODE-" + str(x),
         'sensor_mac': random_mac(),
         'location_lon': random_lon(),
-        'location_lat': random_lat()
+        'location_lat': random_lat(),
+        'datestamp': datetime.utcnow().isoformat(),
+        'altitude': random.uniform(20, 40),
+        'velocity': random.uniform(0, 5),
+        'GPSerror': random.choice([True, False]),
+        'IMUerror': random.choice([True, False]),
+        'rightdirection': random.choice([True, False]),
+        'course': random.uniform(0, 5),
+        'nstats': random.uniform(0, 5),
+        'snr1': random.randint(-80, 80),
+        'snr2': random.randint(-80, 80),
+        'snr3': random.randint(-80, 80),
+        'snr4': random.randint(-80, 80)
     }
     col.insert_one(data)
