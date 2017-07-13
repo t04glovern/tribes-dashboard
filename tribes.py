@@ -114,7 +114,7 @@ def dashboard():
             "left:0;"
             "min-height:500px;"
         ),
-        lat=--31.9744023,
+        lat=-31.9744023,
         lng=115.8614643,
         markers=points
     )
