@@ -114,8 +114,8 @@ def dashboard():
             "left:0;"
             "min-height:500px;"
         ),
-        lat=-31.9538,
-        lng=115.8532,
+        lat=-31968099,
+        lng=115889836,
         markers=points
     )
     return render_template("admin/dashboard.html", dashboard_map=dashboard_map)
