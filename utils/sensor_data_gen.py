@@ -7,8 +7,8 @@ client = MongoClient('docker.nathanglover.com:27017')
 db = client['tribes']
 col = db.get_collection('tribes-data')
 
-base_lon = 115.8614643
-base_lat = -31.9744023
+base_lon = 115.8528094
+base_lat = -31.9540024
 
 
 def random_mac():
@@ -23,11 +23,11 @@ def random_mac():
 
 
 def random_lon():
-    return float(format(base_lon + random.uniform(-0.002, 0.002), '.4f'))
+    return float(format(base_lon + random.uniform(0.0001, 0.001), '.8f'))
 
 
 def random_lat():
-    return float(format(base_lat + random.uniform(-0.002, 0.002), '.4f'))
+    return float(format(base_lat + random.uniform(0.0001, 0.001), '.8f'))
 
 
 # Remove all old entries
