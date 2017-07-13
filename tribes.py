@@ -98,7 +98,7 @@ def dashboard():
 
     for entry in data_info:
         item = {
-            'icon': 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+            'icon': 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
             'lat': entry['location_lat'],
             'lng': entry['location_lon'],
             'infobox': "<b>" + entry['sensor_id'] + "</b>"
