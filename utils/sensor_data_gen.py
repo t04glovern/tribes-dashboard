@@ -7,8 +7,8 @@ client = MongoClient('docker.nathanglover.com:27017')
 db = client['tribes']
 col = db.get_collection('tribes-data')
 
-base_lon = 115889836
-base_lat = -31968099
+base_lon = 115.8614643
+base_lat = -31.9744023
 
 
 def random_mac():
